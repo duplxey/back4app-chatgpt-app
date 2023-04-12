@@ -9,7 +9,7 @@ export default function TabOneScreen() {
   const [movies, setMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
-    const Movie = Parse.Object.extend('Movie');
+    const Movie = Parse.Object.extend('Movies');
     const query = new Parse.Query(Movie);
 
     async function fetchMovies() {
@@ -26,7 +26,7 @@ export default function TabOneScreen() {
   }, [refresh]);
 
   const toggleWatched = async (id: string) => {
-    const Movie = Parse.Object.extend('Movie');
+    const Movie = Parse.Object.extend('Movies');
     const query = new Parse.Query(Movie);
 
     try {
@@ -41,14 +41,14 @@ export default function TabOneScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Watchlist</Text>
-      <View style={styles.separator} lightColor='#eee' darkColor='rgba(255,255,255,0.1)'/>
       <FlatList
         data={movies}
         keyExtractor={(item) => item.id}
         renderItem={({item}) => (
-          <TouchableOpacity onPress={() => toggleWatched(item.id)}>
-            <Text>{item.get('isWatched') ? '✔️' : '❌'} {item.get('name')}</Text>
+          <TouchableOpacity onPress={() => toggleWatched(item.id)} style={{marginTop: 10}}>
+            <Text style={{fontSize: 16}}>
+              {item.get('isWatched') ? '✔️' : '❌'} {item.get('name')} ({item.get('releaseYear')})
+            </Text>
           </TouchableOpacity>
         )}
       />
@@ -59,6 +59,7 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
